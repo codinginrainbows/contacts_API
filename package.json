@@ -7,7 +7,9 @@
   "author": "Gabriel Garcia",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.1",
+    "v4": "^0.0.1"
   },
   "scripts": {
     "dev": "node src/index.js"
