@@ -1,5 +1,7 @@
 const { v4 } = require('uuid');
 
+const database = require('../database'); 
+
 let contacts = require('./contacts_mock');
 
 class ContactsRepository {
@@ -19,20 +21,28 @@ class ContactsRepository {
         ))
     }
 
-    create(name, email, phone, category_id) {
+    async create(name, email, phone, category_id) {
+        const [row] = await database.query(`INSERT INTO contacts (name, email, phone, category_id) VALUES ($1, $2, $3, $4) RETURNING *`, [name, email, phone, category_id]);
+
+        return row;
+    }
+    
+    update(id, { name, email, phone, category_id }) {
         return new Promise((resolve) => {
-            const newContact = {
-                id: v4(),
+            const updatedContact = {
+                id,
                 name,
                 email,
                 phone,
-                category_id,
+                category_id
             }
 
-            contacts.push(newContact);
+            contacts = contacts.map((contact) => (
+                contact.id == id ? updatedContact : contact
+            ));
 
-            resolve(newContact);
-        })
+            resolve(updatedContact);
+         })
     }
     
     delete(id) {
